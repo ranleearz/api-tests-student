@@ -7,8 +7,7 @@ const (
 	ErrorInvalidRequest = "invalid_request"
 	ErrorNotFound       = "not_found"
 	ErrorForbidden      = "forbidden"
-	ErrorAlreadyExists  = "already_exists"
-	ErrorLimitReached   = "limit_reached"
+	ErrorAlreadyExists = "already_exists"
 
 	MessageAuthorizationRequired = "Authorization header required"
 	MessageInvalidAuthorization  = "Invalid or expired token"
@@ -25,7 +24,6 @@ const (
 	MessageAdvertisementNotFound = "Advertisement not found"
 	MessageFavoriteNotFound      = "Favorite entry not found"
 	MessageFavoriteAlreadyExists = "Advertisement is already in favorites"
-	MessageFavoriteOwnForbidden  = "Cannot add own advertisement to favorites"
-	MessageFavoritesLimitReached = "Favorites limit of %d reached"
-	MessageInvalidUUIDLength     = "invalid UUID length: %d"
+	MessageFavoriteOwnForbidden = "Cannot add own advertisement to favorites"
+	MessageInvalidUUIDLength    = "invalid UUID length: %d"
 )

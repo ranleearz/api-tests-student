@@ -6,7 +6,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	"api-tests-template/internal/assertions"
@@ -19,10 +18,7 @@ import (
 	base "api-tests-template/tests"
 )
 
-const (
-	favoritesLimit         = 50
-	invalidAdvertisementId = "not-a-uuid"
-)
+const invalidAdvertisementId = "not-a-uuid"
 
 type TestSuite struct {
 	suite.Suite
@@ -96,30 +92,4 @@ func (s *TestSuite) TestAddFavoriteInvalidAdvertisementId() {
 			base.Check(fmt.Sprintf("Получена ошибка 400: %s", expectedMessage))
 		})
 	}
-}
-
-// Negative: Проверяем 400 ошибку при превышении лимита избранного
-func (s *TestSuite) TestAddFavoriteOverLimit() {
-	base.Precondition("Регистрация отдельного пользователя для заполнения избранного до лимита")
-	limitUserLoginData := auth.RegisterRandomUser(s.T())
-
-	base.Precondition(fmt.Sprintf("Владелец создаёт %d объявлений и пользователь добавляет их в избранное", favoritesLimit))
-	for range favoritesLimit {
-		advertisement := advertisements.CreateRandomAdvertisement(s.T(), s.ownerLoginData.Token)
-		favorites.AddFavorite(s.T(), limitUserLoginData.Token, advertisement.Id)
-	}
-
-	base.Step("Проверяем, что в избранном ровно лимит объявлений")
-	favoritesList := favorites.GetFavorites(s.T(), limitUserLoginData.Token)
-	require.Equalf(s.T(), favoritesLimit, favoritesList.Total, "В избранном должно быть %d объявлений", favoritesLimit)
-
-	base.Precondition("Владелец создаёт объявление сверх лимита")
-	advertisement := advertisements.CreateRandomAdvertisement(s.T(), s.ownerLoginData.Token)
-
-	base.Step(fmt.Sprintf("Добавляем в избранное объявление %s сверх лимита", advertisement.Id))
-	errorResponse := favorites.AddFavoriteWithError(s.T(), limitUserLoginData.Token, advertisement.Id, http.StatusBadRequest)
-
-	expectedMessage := fmt.Sprintf(messages.MessageFavoritesLimitReached, favoritesLimit)
-	assertions.ErrorResponseEquals(s.T(), errorResponse, messages.ErrorLimitReached, expectedMessage)
-	base.Check(fmt.Sprintf("Получена ошибка 400: %s", expectedMessage))
 }

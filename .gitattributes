@@ -1,0 +1,13 @@
+# При clone оставляем LF, а не CRLF
+# Иначе на Windows golangci-lint считает .go неотформатированными
+* text=auto eol=lf
+
+*.go text eol=lf
+go.mod text eol=lf
+go.sum text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+.env text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
